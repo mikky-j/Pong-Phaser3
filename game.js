@@ -10,17 +10,10 @@ class pong extends Phaser.Scene {
     this.height = this.sys.game.config.height;
     this.rectHeight = 30;
     this.dashSpacing = 5;
-    this.ballspeed = 10;
-    this.angle = {
-      30: Math.PI / 6,
-      60: Math.PI / 3,
-      90: Math.PI / 2,
-      180: Math.PI
-    };
-    this.speed = 100
-    this.VelocityX = this.speed * Phaser.Math.DegToRad(30);
-    this.VelocityY = this.speed * Phaser.Math.DegToRad(30);
-    console.log(this.VelocityX);
+    this.speed = 100;
+    this.playerspeed = 12;
+    this.player1Score = 0;
+    this.player2Score = 0;
   }
 
   preload() {
@@ -55,9 +48,18 @@ class pong extends Phaser.Scene {
     this.ball.body.setBounce(1, 1);
     this.physics.add.collider(this.ball, this.player1);
     this.physics.add.collider(this.ball, this.player2);
-    this.ball.body.collideWorldBounds = true;
+    this.ball.body.collideWorldBounds = this.player1.body.collideWorldBounds = this.player2.body.collideWorldBounds = true;
+    this.score1 = this.add.text(this.width / 2 - 100, 20, this.player1Score, { fontSize: "40px" }).setOrigin(0, 0);
+    this.score2 = this.add.text(this.width / 2 + 100, 20, this.player2Score, { fontSize: "40px" }).setOrigin(0, 0);
+    this.cursors = this.input.keyboard.createCursorKeys();
   }
 
   update(delta) {
+    if (this.cursors.up.isDown) {
+      this.player1.y -= this.playerspeed;
+    }
+    if (this.cursors.down.isDown) {
+      this.player1.y += this.playerspeed;
+    }
   }
 }
