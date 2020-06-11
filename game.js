@@ -51,7 +51,7 @@ class pong extends Phaser.Scene {
     this.player1.body.immovable = true;
     this.player2.body.immovable = true;
     this.ball.setCircle(24, 14, 14);
-    this.physics.velocityFromAngle(-60, 200, this.ball.body.velocity);
+    this.physics.velocityFromAngle(-50, 200, this.ball.body.velocity);
     this.ball.body.setBounce(1, 1);
     this.physics.add.collider(this.ball, this.player1);
     this.physics.add.collider(this.ball, this.player2);
