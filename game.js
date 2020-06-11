@@ -78,7 +78,7 @@ class pong extends Phaser.Scene {
     if (this.controls.s.isDown) {
       this.player2.y += this.playerspeed;
     }
-    if (this.ball.speed < 300) {
+    if (this.ball.speed < this.speed) {
         this.ball.speed = this.speed;
     }
     this.physics.overlap(this.ball, this.goal1, () => {
