@@ -15,6 +15,11 @@ class pong extends Phaser.Scene {
     this.player1Score = 0;
     this.player2Score = 0;
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.controls = {
+      w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
+
+    };
     this.anglesRight = [-60, -45, -30, 30, 45, 60];
     this.anglesLeft = [120, 135, 150, 210, 225, 240];
   }
@@ -48,8 +53,7 @@ class pong extends Phaser.Scene {
     this.physics.add.existing(this.goal1);
     this.physics.add.existing(this.goal2);
     this.ball.scale = 0.7;
-    this.player1.body.immovable = true;
-    this.player2.body.immovable = true;
+    this.player1.body.immovable = this.player2.body.immovable = true;
     this.ball.setCircle(24, 14, 14);
     this.physics.velocityFromAngle(Phaser.Math.RND.pick(this.anglesRight), this.speed, this.ball.body.velocity);
     this.ball.body.setBounce(1, 1);
@@ -67,6 +71,15 @@ class pong extends Phaser.Scene {
     }
     if (this.cursors.down.isDown) {
       this.player1.y += this.playerspeed;
+    }
+    if (this.controls.w.isDown) {
+      this.player2.y -= this.playerspeed;
+    }
+    if (this.controls.s.isDown) {
+      this.player2.y += this.playerspeed;
+    }
+    if (this.ball.speed < 300) {
+        this.ball.speed = this.speed;
     }
     this.physics.overlap(this.ball, this.goal1, () => {
       this.ball.x = this.width / 2;
