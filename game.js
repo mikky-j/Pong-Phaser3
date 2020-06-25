@@ -1,4 +1,4 @@
-
+var winner;
 class pong extends Phaser.Scene {
   constructor() {
     super("pong");
@@ -35,11 +35,13 @@ class pong extends Phaser.Scene {
 
   create() {
     this.line = this.add.group();
-    this.goal2 = this.add.rectangle(this.width - 1, 0, 2, this.height, 0x000000, 0).setOrigin(0, 0);
+    this.goal2 = this.add.rectangle(this.width - 2, 0, 2, this.height, 0x000000, 0).setOrigin(0, 0);
     this.goal1 = this.add.rectangle(0, 0, 2, this.height, 0x000000, 0).setOrigin(0, 0);
     this.ball = this.physics.add.sprite(this.width / 2, this.height / 2, "ball");
     this.player1 = this.add.rectangle(1, (this.height / 2) - 50, 15, 100, 0xffffff).setOrigin(0, 0);
     this.player2 = this.add.rectangle(this.width - 16, (this.height / 2) - 50, 15, 100, 0xffffff).setOrigin(0, 0);
+    this.score1 = this.add.text(this.width / 2 - 100, 20, this.player1Score, { fontSize: "40px" }).setOrigin(0, 0);
+    this.score2 = this.add.text(this.width / 2 + 100, 20, this.player2Score, { fontSize: "40px" }).setOrigin(0, 0);
 
     // GameObjects Manipulation
     for (var x = 0; x < Math.floor(this.height / (this.rectHeight + this.dashSpacing)); x++) {
@@ -60,12 +62,9 @@ class pong extends Phaser.Scene {
     this.physics.add.collider(this.ball, this.player1);
     this.physics.add.collider(this.ball, this.player2);
     this.ball.body.collideWorldBounds = this.player1.body.collideWorldBounds = this.player2.body.collideWorldBounds = true;
-    this.score1 = this.add.text(this.width / 2 - 100, 20, this.player1Score, { fontSize: "40px" }).setOrigin(0, 0);
-    this.score2 = this.add.text(this.width / 2 + 100, 20, this.player2Score, { fontSize: "40px" }).setOrigin(0, 0);
   }
 
   update(delta) {
-
     if (this.cursors.up.isDown) {
       this.player1.y -= this.playerspeed;
     }
@@ -79,7 +78,15 @@ class pong extends Phaser.Scene {
       this.player2.y += this.playerspeed;
     }
     if (this.ball.speed < this.speed) {
-        this.ball.speed = this.speed;
+      this.ball.speed = this.speed;
+    }
+    if(this.player1Score == 10){
+      winner = "Player 1";
+      this.scene.start("Game Over");
+    }
+    if(this.player2Score == 10){
+      winner = "Player 2";
+      this.scene.start("Game Over");
     }
     this.physics.overlap(this.ball, this.goal1, () => {
       this.ball.x = this.width / 2;
